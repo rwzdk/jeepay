@@ -236,6 +236,11 @@ public class SysUserController extends CommonCtrl {
 			throw new BizException("该操作员不存在！");
 		}
 
+		//判断操作员归属当前商户，防止越权删除其他商户的操作员
+		if (!getCurrentMchNo().equals(sysUser.getBelongInfoId())) {
+			throw new BizException(ApiCodeEnum.SYS_PERMISSION_ERROR);
+		}
+
 		//判断是否自己删除自己
 		if(recordId.equals(getCurrentUser().getSysUser().getSysUserId())){
 			throw new BizException("系统不允许删除当前登陆用户！");
